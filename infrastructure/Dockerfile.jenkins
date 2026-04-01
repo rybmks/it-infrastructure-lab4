@@ -1,0 +1,20 @@
+FROM jenkins/jenkins:latest
+
+USER root
+
+RUN apt-get update && apt-get install -y \
+    fontconfig \
+    xfonts-base \
+    xfonts-75dpi \
+    libxrender1 \
+    libxext6 \
+    libssl3 \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget -q https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_arm64.deb \
+    && dpkg -i wkhtmltox_0.12.6.1-3.bookworm_arm64.deb \
+    || apt-get install -f -y \
+    && rm wkhtmltox_0.12.6.1-3.bookworm_arm64.deb
+
+USER jenkins
